@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
- 
-void main() {
-  runApp(const GeeksForGeeks());
-}
- 
-class GeeksForGeeks extends StatelessWidget {
-  const GeeksForGeeks({Key? key}) : super(key: key);
- 
+
+main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    // Material App
-    return MaterialApp(
- 
-        // Scaffold Widget
-        home: Scaffold(
-      appBar: AppBar(
-        // AppBar takes a Text Widget
-        // in it's title parameter
-        title: const Text('GFG'),
-      ),
-      body: const Center(child: Text('Hello World')),
-    ));
-  }
+  Widget build(BuildContext context) => MaterialApp(
+      theme: ThemeData.dark(useMaterial3: true),
+      home: Scaffold(
+        body: SafeArea(
+          child: Center(
+              child: Text(
+            'Hello, World!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'roboto',
+                fontWeight: FontWeight.bold,
+                fontSize: 30),
+          )),
+        ),
+      ));
 }
