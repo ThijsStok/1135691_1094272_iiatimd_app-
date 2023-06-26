@@ -165,6 +165,28 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
       ),
+      bottomNavigationBar: NavigationBarTheme(
+          data: NavigationBarThemeData(
+              indicatorColor: Colors.blue.shade400,
+              labelTextStyle: MaterialStateProperty.all(TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white))),
+          child: NavigationBar(
+            height: 70,
+            backgroundColor: const Color.fromARGB(255, 44, 44, 44),
+            destinations: [
+              NavigationDestination(
+                  icon: Icon(Icons.home_filled, color: Colors.white),
+                  label: 'Home'),
+              NavigationDestination(
+                  icon: Icon(Icons.assignment, color: Colors.white),
+                  label: 'Rapports'),
+              NavigationDestination(
+                  icon: Icon(Icons.person, color: Colors.white),
+                  label: 'Account')
+            ],
+          )),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
