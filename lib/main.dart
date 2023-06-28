@@ -101,7 +101,19 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             width: double.infinity,
             height: 200,
-            color: Colors.red,
+            decoration: BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                '😊',
+                style: TextStyle(fontSize: 100),
+              ),
+            ),
           ),
           SizedBox(height: 20),
           Padding(
@@ -113,7 +125,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: EdgeInsets.all(10),
                     child: Container(
                       height: 100,
-                      color: Colors.blue,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -138,7 +153,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: EdgeInsets.all(10),
                     child: Container(
                       height: 100,
-                      color: Colors.green,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -165,10 +183,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: Container(
         width: MediaQuery.of(context).size.width * 0.9,
-        height: 80,
+        height: 100,
         decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(50),
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -191,7 +209,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   'biertje',
                   style: TextStyle(fontSize: 20),
                 ),
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.lightBlue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
             ),
             SizedBox(width: 20),
@@ -205,13 +226,28 @@ class _MyHomePageState extends State<MyHomePage> {
                   'sigaret',
                   style: TextStyle(fontSize: 20),
                 ),
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
             ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+      ),
     );
   }
 }
