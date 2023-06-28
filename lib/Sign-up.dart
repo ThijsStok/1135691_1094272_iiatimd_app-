@@ -21,6 +21,14 @@ class _SignUpPageState extends State<SignUpPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user?.uid)
+          .set({
+        'firstName': _firstNameController.text,
+        'lastName': _lastNameController.text,
+        'email': _emailController.text,
+      });
       // User is signed up and logged in successfully, handle navigation to other screens
       onLoginSuccess(userCredential);
     } on FirebaseAuthException catch (e) {
