@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_1/Logging.dart';
 import 'package:flutter_application_1/Profile.dart';
 import 'package:flutter_application_1/Rapports.dart';
 import 'Login.dart';
@@ -15,13 +16,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
+
   final screens = [
-    Center(
-      child: Text(
-        'Home',
-        style: TextStyle(fontSize: 72),
-      ),
-    ),
+    Logging(),
     Rapports(),
     Profile(),
   ];
