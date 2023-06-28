@@ -34,6 +34,13 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _resetCounts() {
+    setState(() {
+      _biertjesCount = 0;
+      _sigarettenCount = 0;
+    });
+  }
+
   void _showAddDialog(String title, Function addFunction) {
     int _count = 1;
     showDialog(
@@ -92,6 +99,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String smiley = '😊';
+    if (_biertjesCount + _sigarettenCount > 10) {
+      smiley = '😐';
+    }
+    if (_biertjesCount + _sigarettenCount > 20) {
+      smiley = '😔';
+    }
+    if (_sigarettenCount > 30) {
+      smiley = '😵';
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Demo'),
@@ -110,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             child: Center(
               child: Text(
-                '😊',
+                smiley,
                 style: TextStyle(fontSize: 100),
               ),
             ),
@@ -183,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           SizedBox(height: 20),
           Container(
-            width: MediaQuery.of(context).size.width / 1 - 60,
+            width: 330,
             height: 100,
             decoration: BoxDecoration(
               color: Colors.yellow,
@@ -195,6 +212,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(fontSize: 30),
               ),
             ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _resetCounts,
+            child: Text('Reset counts'),
           ),
         ],
       ),
