@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
 
   final screens = [
-    Logging(),
+    MyHomePage(),
     Rapports(),
     Profile(),
   ];

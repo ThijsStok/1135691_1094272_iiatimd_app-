@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
 
-class Logging extends StatefulWidget {
-  const Logging({super.key});
+void main() => runApp(MyApp());
 
+class MyApp extends StatelessWidget {
   @override
-  State<Logging> createState() => _LoggingState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData.dark(),
+      home: MyHomePage(),
+    );
+  }
 }
 
-class _LoggingState extends State<Logging> {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   int _biertjesCount = 0;
   int _sigarettenCount = 0;
+
   void _addBiertje(int count) {
     setState(() {
       _biertjesCount += count;
@@ -29,7 +41,7 @@ class _LoggingState extends State<Logging> {
     });
   }
 
-  void _showAddDialog(String title, Function addFunction) {
+  void _showAddDialog(String title) {
     int _count = 1;
     showDialog(
       context: context,
@@ -43,6 +55,26 @@ class _LoggingState extends State<Logging> {
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      ElevatedButton(
+                        onPressed: () {
+                          _addBiertje(_count);
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Add biertje'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          _addSigaret(_count);
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Add sigaret'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       IconButton(
                         onPressed: () {
@@ -68,14 +100,6 @@ class _LoggingState extends State<Logging> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      addFunction(_count);
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Add'),
-                  ),
                 ],
               ),
             );
@@ -98,6 +122,9 @@ class _LoggingState extends State<Logging> {
       smiley = '😵';
     }
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Flutter Demo'),
+      ),
       body: Column(
         children: <Widget>[
           Container(
@@ -185,7 +212,7 @@ class _LoggingState extends State<Logging> {
           ),
           SizedBox(height: 20),
           Container(
-            width: 330,
+            width: 340,
             height: 100,
             decoration: BoxDecoration(
               color: Colors.yellow,
@@ -211,50 +238,17 @@ class _LoggingState extends State<Logging> {
         decoration: BoxDecoration(
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, 3),
-            ),
-          ],
+          
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Expanded(
-              child: FloatingActionButton(
-                onPressed: () {
-                  _showAddDialog('Add biertje', _addBiertje);
-                },
-                tooltip: 'Add biertje',
-                child: Text(
-                  'biertje',
-                  style: TextStyle(fontSize: 20),
-                ),
-                backgroundColor: Colors.lightBlue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-            SizedBox(width: 20),
-            Expanded(
-              child: FloatingActionButton(
-                onPressed: () {
-                  _showAddDialog('Add sigaret', _addSigaret);
-                },
-                tooltip: 'Add sigaret',
-                child: Text(
-                  'sigaret',
-                  style: TextStyle(fontSize: 20),
-                ),
-                backgroundColor: Colors.green,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
+            FloatingActionButton(
+              onPressed: () {
+                _showAddDialog('Add item');
+              },
+              tooltip: 'Add item',
+              child: Icon(Icons.add),
             ),
           ],
         ),
