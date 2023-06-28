@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -108,6 +110,14 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
+
+  void _addToConsumables() {
+    FirebaseFirestore.instance.collection('consumables').add({
+      'biertjes': _biertjesCount,
+      'sigaretten': _sigarettenCount,
+    });
+    }
+  
 
   @override
   Widget build(BuildContext context) {
