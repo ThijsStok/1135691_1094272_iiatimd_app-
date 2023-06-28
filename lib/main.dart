@@ -7,9 +7,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.dark(),
       home: MyHomePage(),
     );
   }
@@ -166,10 +164,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       floatingActionButton: Container(
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width * 0.9,
         height: 80,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.blue,
           borderRadius: BorderRadius.circular(50),
           boxShadow: [
             BoxShadow(
@@ -193,6 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   'biertje',
                   style: TextStyle(fontSize: 20),
                 ),
+                backgroundColor: Colors.blue,
               ),
             ),
             SizedBox(width: 20),
@@ -206,6 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   'sigaret',
                   style: TextStyle(fontSize: 20),
                 ),
+                backgroundColor: Colors.blue,
               ),
             ),
           ],
