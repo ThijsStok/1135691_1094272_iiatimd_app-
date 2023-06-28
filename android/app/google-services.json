@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "742887988123",
+    "project_id": "health-monitor-97bda",
+    "storage_bucket": "health-monitor-97bda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742887988123:android:1709590605f727fe5d5f3e",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "742887988123-101ka8nq1761lt0s48m6jtcmbs22cfin.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8P5f-tImLGMaj9pGhxBiAGwomGIL4ziM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "742887988123-101ka8nq1761lt0s48m6jtcmbs22cfin.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "742887988123-djkvovv50nlaeicb9d2d0ej1aa00pn6h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterApplication1"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
