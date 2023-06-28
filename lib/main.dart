@@ -124,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Container(
+                      width: MediaQuery.of(context).size.width / 2 - 30,
                       height: 100,
                       decoration: BoxDecoration(
                         color: Colors.blue,
@@ -152,6 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Container(
+                      width: MediaQuery.of(context).size.width / 2 - 30,
                       height: 100,
                       decoration: BoxDecoration(
                         color: Colors.green,
@@ -177,6 +179,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ],
+            ),
+          ),
+          SizedBox(height: 20),
+          Container(
+            width: MediaQuery.of(context).size.width / 1 - 60,
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.yellow,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: Text(
+                'stappen',
+                style: TextStyle(fontSize: 30),
+              ),
             ),
           ),
         ],
@@ -236,18 +253,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-      ),
     );
   }
 }
