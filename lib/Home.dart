@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final screens = [
     MyHomePage(),
     FitnessJournalPage(),
-    Profile(),
+    ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: NavigationBarTheme(
           data: NavigationBarThemeData(
               indicatorColor: Colors.blue.shade400,
-              labelTextStyle: MaterialStateProperty.all(TextStyle(
+              labelTextStyle: MaterialStateProperty.all(const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: Colors.white))),
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onDestinationSelected: (index) =>
                 setState(() => this.index = index),
             backgroundColor: const Color.fromARGB(255, 44, 44, 44),
-            destinations: [
+            destinations: const [
               NavigationDestination(
                   icon: Icon(Icons.home_filled, color: Colors.white),
                   label: 'Home'),
