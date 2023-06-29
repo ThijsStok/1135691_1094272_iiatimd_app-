@@ -163,8 +163,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _addToConsumables(int _biertjesCount, int _sigarettenCount) {
     FirebaseFirestore.instance.collection('consumables').add({
-      'biertjes': _biertjesCount,
-      'sigaretten': _sigarettenCount,
+      'biertjes': 6,
+      'sigaretten': 6,
     });
     }
   

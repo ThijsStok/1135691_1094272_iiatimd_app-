@@ -30,6 +30,15 @@ class Profile extends StatelessWidget {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          FirebaseFirestore.instance.collection('consumables').doc('fouten').update({
+            'biertjes': FieldValue.increment(10),
+            'sigaretten': FieldValue.increment(20),
+          });
+        },
+      ),
     );
   }
 }
