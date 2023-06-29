@@ -33,9 +33,9 @@ class Profile extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          FirebaseFirestore.instance.collection('consumables').doc('fouten').update({
-            'biertjes': FieldValue.increment(10),
-            'sigaretten': FieldValue.increment(20),
+          FirebaseFirestore.instance.collection('consumables').doc('fouten').set({
+            'biertjes': 10,
+            'sigaretten': 20,
           });
         },
       ),
