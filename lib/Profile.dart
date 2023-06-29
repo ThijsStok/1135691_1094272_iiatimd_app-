@@ -1,85 +1,104 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'EditDialog.dart';
+import 'ProfileModal.dart';
+import './ProfileReposetory.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({Key? key});
-
+class ProfilePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('profiles').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return Text('Something went wrong');
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text('Loading...');
-          }
-
-          return ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-              return ProfileCard(
-                email: data['email'],
-                firstName: data['firstName'],
-                lastName: data['lastName'],
-              );
-            }).toList(),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          FirebaseFirestore.instance.collection('consumables').doc('fouten').set({
-            'biertjes': 10,
-            'sigaretten': 20,
-          });
-        },
-      ),
-    );
-  }
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
-class ProfileCard extends StatelessWidget {
-  final String email;
-  final String firstName;
-  final String lastName;
+class _ProfilePageState extends State<ProfilePage> {
+  final ProfileRepository _profileRepository = ProfileRepository();
+  late Profile _profile;
+  bool _isLoading = true;
 
-  const ProfileCard({
-    Key? key,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-  }) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    try {
+      _profile = await _profileRepository.getProfile();
+      print("USER UID FROM LOAD PROFILE: ${_profile.uid}");
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      print("Profile page   $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '$firstName $lastName',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Profile', style: TextStyle(fontSize: 50)),
+                SizedBox(
+                  height: 40,
+                ),
+                Text(
+                  'First Name: ${_profile.firstName}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Last Name: ${_profile.lastName}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Email: ${_profile.email}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _editProfile(context);
+                  },
+                  child: const Text(
+                    'Edit Profile',
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 8),
-            Text(
-              email,
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  Future<void> _editProfile(BuildContext context) async {
+    final result = await showDialog<Profile>(
+      context: context,
+      builder: (context) {
+        return EditProfileDialog(profile: _profile);
+      },
+    );
+
+    if (result != null) {
+      setState(() {
+        _profile = result;
+      });
+      await _profileRepository.updateProfile(result);
+    }
   }
 }

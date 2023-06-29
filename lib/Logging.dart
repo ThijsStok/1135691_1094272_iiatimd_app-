@@ -99,17 +99,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       ElevatedButton(
                         onPressed: () {
                           FirebaseFirestore.instance.collection('consumables').doc('fouten').update({
-                          'biertjes': FieldValue.increment(_count)
+                            'biertjes': FieldValue.increment(_count)
                           });
                           Navigator.of(context).pop();
-
                         },
                         child: Text('Add biertje'),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           FirebaseFirestore.instance.collection('consumables').doc('fouten').update({
-                          'sigaretten': FieldValue.increment(_count)
+                            'sigaretten': FieldValue.increment(_count)
                           });
                           Navigator.of(context).pop();
                         },
@@ -171,19 +170,6 @@ class _MyHomePageState extends State<MyHomePage> {
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
           int total = data['biertjes'] + data['sigaretten'];
 
-          IconData icon;
-          Color color;
-          if (total <= 10) {
-            icon = Icons.sentiment_very_satisfied;
-            color = Colors.green;
-          } else if (total <= 20) {
-            icon = Icons.sentiment_neutral;
-            color = Colors.yellow;
-          } else {
-            icon = Icons.sentiment_very_dissatisfied;
-            color = Colors.red;
-          }
-
           String emoji;
           if (total <= 10) {
             emoji = '😄';
@@ -207,8 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             text: emoji,
                             style: TextStyle(
                               fontFamily: 'EmojiOne',
-                              fontSize: 64,
-                              color: color,
+                              fontSize: 120,
                             ),
                           ),
                         ],
@@ -278,8 +263,38 @@ class _MyHomePageState extends State<MyHomePage> {
                             ],
                           ),
                         ),
-                        
                       ],
+                    ),
+                    SizedBox(height: 16),
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Stappen',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            '$_stepCount',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
