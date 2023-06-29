@@ -244,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         width: MediaQuery.of(context).size.width / 2 - 30,
                         height: 100,
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: Colors.blue,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Column(
@@ -274,7 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 340,
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.yellow,
+                color: Colors.blue,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
