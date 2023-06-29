@@ -111,13 +111,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       ElevatedButton(
                         onPressed: () {
                           _addBiertje(_count);
+                          FirebaseFirestore.instance.collection('consumables').doc('fouten').update({
+                          'biertjes': FieldValue.increment(_count)
+                          });
                           Navigator.of(context).pop();
+
                         },
                         child: Text('Add biertje'),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           _addSigaret(_count);
+                          FirebaseFirestore.instance.collection('consumables').doc('fouten').update({
+                          'sigaretten': FieldValue.increment(_count)
+                          });
                           Navigator.of(context).pop();
                         },
                         child: Text('Add sigaret'),
@@ -160,13 +167,6 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
-
-  void _addToConsumables(int _biertjesCount, int _sigarettenCount) {
-    FirebaseFirestore.instance.collection('consumables').add({
-      'biertjes': 6,
-      'sigaretten': 6,
-    });
-    }
   
 
   @override
