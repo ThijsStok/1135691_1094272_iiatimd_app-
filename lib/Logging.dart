@@ -73,18 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _addBiertje(int count) {
-    setState(() {
-      _biertjesCount += count;
-    });
-  }
-
-  void _addSigaret(int count) {
-    setState(() {
-      _sigarettenCount += count;
-    });
-  }
-
   void _resetCounts() {
     setState(() {
       _biertjesCount = 0;
@@ -110,14 +98,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: <Widget>[
                       ElevatedButton(
                         onPressed: () {
-                          _addBiertje(_count);
+                          FirebaseFirestore.instance.collection('consumables').doc('fouten').update({
+                            'biertjes': FieldValue.increment(_count)
+                          });
                           Navigator.of(context).pop();
                         },
                         child: Text('Add biertje'),
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          _addSigaret(_count);
+                          FirebaseFirestore.instance.collection('consumables').doc('fouten').update({
+                            'sigaretten': FieldValue.increment(_count)
+                          });
                           Navigator.of(context).pop();
                         },
                         child: Text('Add sigaret'),
@@ -161,144 +153,155 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _addToConsumables() {
-    FirebaseFirestore.instance.collection('consumables').add({
-      'biertjes': _biertjesCount,
-      'sigaretten': _sigarettenCount,
-    });
-    }
-  
-
   @override
   Widget build(BuildContext context) {
-    String smiley = '😊';
-    if (_biertjesCount + _sigarettenCount > 10) {
-      smiley = '😐';
-    }
-    if (_biertjesCount + _sigarettenCount > 20) {
-      smiley = '😔';
-    }
-    if (_sigarettenCount > 30) {
-      smiley = '😵';
-    }
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  smiley,
-                  style: TextStyle(fontSize: 100),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width / 2 - 30,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'biertjes',
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.center,
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance.collection('consumables').doc('fouten').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text('Loading...');
+          }
+
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          int total = data['biertjes'] + data['sigaretten'];
+
+          String emoji;
+          if (total <= 10) {
+            emoji = '😄';
+          } else if (total <= 20) {
+            emoji = '😐';
+          } else {
+            emoji = '😔';
+          }
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: emoji,
+                            style: TextStyle(
+                              fontFamily: 'EmojiOne',
+                              fontSize: 120,
                             ),
-                            SizedBox(height: 10),
-                            Text(
-                              '$_biertjesCount',
-                              style: TextStyle(fontSize: 30),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width / 2 - 30,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(20),
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          width: 150,
+                          height: 150,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Biertjes',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                '${data['biertjes']}',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'sigaretten',
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '$_sigarettenCount',
-                              style: TextStyle(fontSize: 30),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                        Container(
+                          width: 150,
+                          height: 150,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Sigaretten',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                '${data['sigaretten']}',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Stappen',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            '$_stepCount',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            Container(
-              width: 340,
-              height: 100,
-              decoration: BoxDecoration(
-                color: Colors.yellow,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'stappen',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '$_stepCount',
-                    style: TextStyle(fontSize: 30),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _resetCounts,
-              child: Text('Reset counts'),
-            ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
       floatingActionButton: Container(
         width: MediaQuery.of(context).size.width * 0.9,
