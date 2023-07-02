@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/Logging.dart';
 import 'package:flutter_application_1/Profile.dart';
 import 'package:flutter_application_1/Rapports.dart';
-import 'Login.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -15,42 +14,73 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int index = 0;
+  int _selectedIndex = 0;
 
-  final screens = [
+  static List<Widget> _widgetOptions = <Widget>[
     MyHomePage(),
     FitnessJournalPage(),
     ProfilePage(),
   ];
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[index],
-      bottomNavigationBar: NavigationBarTheme(
-          data: NavigationBarThemeData(
-              indicatorColor: Colors.blue.shade400,
-              labelTextStyle: MaterialStateProperty.all(const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white))),
-          child: NavigationBar(
-            height: 70,
-            selectedIndex: index,
-            onDestinationSelected: (index) =>
-                setState(() => this.index = index),
-            backgroundColor: const Color.fromARGB(255, 44, 44, 44),
-            destinations: const [
-              NavigationDestination(
-                  icon: Icon(Icons.home_filled, color: Colors.white),
-                  label: 'Home'),
-              NavigationDestination(
-                  icon: Icon(Icons.assignment, color: Colors.white),
-                  label: 'Rapports'),
-              NavigationDestination(
-                  icon: Icon(Icons.person, color: Colors.white),
-                  label: 'Account')
-            ],
-          )),
+      bottomNavigationBar: MediaQuery.of(context).size.width < 640
+          ? BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_filled),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.assignment),
+                  label: 'Rapports',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Account',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Colors.blue.shade400,
+              onTap: _onItemTapped,
+            )
+          : null,
+      body: Row(
+        children: [
+          MediaQuery.of(context).size.width >= 640
+              ? SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: NavigationRail(
+                    destinations: const <NavigationRailDestination>[
+                      NavigationRailDestination(
+                        icon: Icon(Icons.home_filled),
+                        label: Text('Home'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.assignment),
+                        label: Text('Rapports'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.person),
+                        label: Text('Account'),
+                      ),
+                    ],
+                    selectedIndex: _selectedIndex,
+                    onDestinationSelected: _onItemTapped,
+                  ),
+                )
+              : const SizedBox.shrink(),
+          Expanded(
+            child: _widgetOptions.elementAt(_selectedIndex),
+          ),
+        ],
+      ),
     );
   }
 }
