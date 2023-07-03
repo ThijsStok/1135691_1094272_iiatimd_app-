@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/Logging.dart';
 import 'package:flutter_application_1/Profile.dart';
-import 'package:flutter_application_1/Rapports.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -18,7 +17,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static List<Widget> _widgetOptions = <Widget>[
     MyHomePage(),
-    FitnessJournalPage(),
     ProfilePage(),
   ];
   void _onItemTapped(int index) {
