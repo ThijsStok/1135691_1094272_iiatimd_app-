@@ -64,56 +64,58 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 0, 0, 50),
-              child: const Text(
-                'Log In',
-                style: TextStyle(fontSize: 40),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 50, 0, 10),
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(200, 40),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+                child: const Text(
+                  'Log In',
+                  style: TextStyle(fontSize: 40),
+                  textAlign: TextAlign.left,
                 ),
-                onPressed: () => _signInWithEmailAndPassword(context),
-                child: const Text('Login'),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            Row(
-              children: [
-                Text('No Account? Click '),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignUpPage()),
-                    );
-                  },
-                  child: Text('Here'),
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+              ),
+              TextField(
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 50, 0, 10),
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(200, 40),
+                  ),
+                  onPressed: () => _signInWithEmailAndPassword(context),
+                  child: const Text('Login'),
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 16.0),
+              Row(
+                children: [
+                  Text('No Account? Click '),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignUpPage()),
+                      );
+                    },
+                    child: Text('Here'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
