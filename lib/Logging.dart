@@ -16,7 +16,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _sigarettenCount = 0;
   StreamSubscription<int>? _subscription;
   int _stepCount = 0;
-  Timer _timer;
+  late Timer _timer;
   @override
   void initState() {
     super.initState();
