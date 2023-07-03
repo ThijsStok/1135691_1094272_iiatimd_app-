@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'ProfileModal.dart';
-import './ProfileReposetory.dart';
 
 class EditProfileDialog extends StatefulWidget {
   final Profile profile;

@@ -38,10 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.assignment),
-                  label: 'Rapports',
-                ),
-                BottomNavigationBarItem(
                   icon: Icon(Icons.person),
                   label: 'Account',
                 ),
@@ -61,10 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       NavigationRailDestination(
                         icon: Icon(Icons.home_filled),
                         label: Text('Home'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.assignment),
-                        label: Text('Rapports'),
                       ),
                       NavigationRailDestination(
                         icon: Icon(Icons.person),

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -12,11 +13,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _biertjesCount = 0;
-  int _sigarettenCount = 0;
   StreamSubscription<int>? _subscription;
   int _stepCount = 0;
   late Timer _timer;
+  late SharedPreferences _prefs;
   @override
   void initState() {
     super.initState();
@@ -53,14 +53,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void _startTimer() {
     _timer = Timer.periodic(Duration(hours: 24), (timer) {
       setState(() {
-        _biertjesCount = 0;
-        _sigarettenCount = 0;
         _stepCount = 0;
       });
-      FirebaseFirestore.instance
-          .collection('step_counter')
-          .doc('steps')
-          .update({'steps': 0});
 
       FirebaseFirestore.instance
           .collection('consumables')
@@ -74,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _storeStepCount(int stepCount) {
+    _prefs.setInt('stepCount', stepCount);
     FirebaseFirestore.instance
         .collection('step_counter')
         .doc('steps')
@@ -87,21 +82,48 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _initPedometer() {
+  void _initPedometer() async {
+    _prefs = await SharedPreferences.getInstance();
+    int lastStepCount = _prefs.getInt('stepCount') ?? 0;
+    int lastBootTime =
+        _prefs.getInt('bootTime') ?? DateTime.now().millisecondsSinceEpoch;
+
     Pedometer.stepCountStream.listen((StepCount stepCountEvent) {
       setState(() {
-        _stepCount = stepCountEvent.steps;
+        _stepCount = stepCountEvent.steps - lastStepCount;
       });
       _storeStepCount(stepCountEvent.steps);
+
+      int currentBootTime = DateTime.now().millisecondsSinceEpoch;
+      if (_isDifferentDay(lastBootTime, currentBootTime)) {
+        _resetStepCount();
+        _prefs.setInt('bootTime', currentBootTime);
+      }
     }).onError((error) {
       print('Error: $error');
     });
   }
 
+  bool _isDifferentDay(int timestamp1, int timestamp2) {
+    DateTime date1 = DateTime.fromMillisecondsSinceEpoch(timestamp1);
+    DateTime date2 = DateTime.fromMillisecondsSinceEpoch(timestamp2);
+    return date1.year != date2.year ||
+        date1.month != date2.month ||
+        date1.day != date2.day;
+  }
+
+  void _resetStepCount() {
+    setState(() {
+      _stepCount = 0;
+    });
+    FirebaseFirestore.instance
+        .collection('step_counter')
+        .doc('steps')
+        .update({'steps': 0});
+  }
+
   void _resetCounts() {
     setState(() {
-      _biertjesCount = 0;
-      _sigarettenCount = 0;
       _stepCount = 0;
     });
   }
