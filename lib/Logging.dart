@@ -173,9 +173,9 @@ class _MyHomePageState extends State<MyHomePage> {
               int total = data['biertjes'] + data['sigaretten'];
 
               String emoji;
-              if (total <= 10) {
+              if (_stepCount - total*1000 <= 1000) {
                 emoji = '😄';
-              } else if (total <= 40) {
+              } else if (_stepCount - total*1000 <= 4000) {
                 emoji = '😐';
               } else {
                 emoji = '😔';
