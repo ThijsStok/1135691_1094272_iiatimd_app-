@@ -16,11 +16,12 @@ class _MyHomePageState extends State<MyHomePage> {
   int _sigarettenCount = 0;
   StreamSubscription<int>? _subscription;
   int _stepCount = 0;
-
+  Timer _timer;
   @override
   void initState() {
     super.initState();
     _checkAndRequestPermissions();
+    _startTimer();
   }
 
   Future<void> _checkAndRequestPermissions() async {
@@ -49,15 +50,39 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _storeStepCount(int stepCount) {
-    FirebaseFirestore.instance.collection('step_counter').add({
-      'timestamp': DateTime.now(),
-      'stepCount': stepCount,
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(hours: 24), (timer) {
+      setState(() {
+        _biertjesCount = 0;
+        _sigarettenCount = 0;
+        _stepCount = 0;
+      });
+      FirebaseFirestore.instance
+          .collection('step_counter')
+          .doc('steps')
+          .update({'steps': 0});
+
+      FirebaseFirestore.instance
+          .collection('consumables')
+          .doc('fouten')
+          .update({'biertjes': 0});
+      FirebaseFirestore.instance
+          .collection('consumables')
+          .doc('fouten')
+          .update({'sigaretten': 0});
     });
+  }
+
+  void _storeStepCount(int stepCount) {
+    FirebaseFirestore.instance
+        .collection('step_counter')
+        .doc('steps')
+        .update({'steps': FieldValue.increment(_stepCount)});
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     _subscription?.cancel();
     super.dispose();
   }
@@ -98,18 +123,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: <Widget>[
                       ElevatedButton(
                         onPressed: () {
-                          FirebaseFirestore.instance.collection('consumables').doc('fouten').update({
-                            'biertjes': FieldValue.increment(_count)
-                          });
+                          FirebaseFirestore.instance
+                              .collection('consumables')
+                              .doc('fouten')
+                              .update(
+                                  {'biertjes': FieldValue.increment(_count)});
                           Navigator.of(context).pop();
                         },
                         child: Text('Add biertje'),
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          FirebaseFirestore.instance.collection('consumables').doc('fouten').update({
-                            'sigaretten': FieldValue.increment(_count)
-                          });
+                          FirebaseFirestore.instance
+                              .collection('consumables')
+                              .doc('fouten')
+                              .update(
+                                  {'sigaretten': FieldValue.increment(_count)});
                           Navigator.of(context).pop();
                         },
                         child: Text('Add sigaret'),
@@ -157,8 +186,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance.collection('consumables').doc('fouten').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        stream: FirebaseFirestore.instance
+            .collection('consumables')
+            .doc('fouten')
+            .snapshots(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Something went wrong');
           }
@@ -167,7 +200,8 @@ class _MyHomePageState extends State<MyHomePage> {
             return Text('Loading...');
           }
 
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
           int total = data['biertjes'] + data['sigaretten'];
 
           String emoji;
