@@ -100,48 +100,53 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 50),
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(fontSize: 40),
-                      textAlign: TextAlign.left,
-                    ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+                child: const Text(
+                  'Sign Up',
+                  style: TextStyle(fontSize: 40),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              TextField(
+                controller: _firstNameController,
+                decoration: const InputDecoration(labelText: 'First Name'),
+              ),
+              TextField(
+                controller: _lastNameController,
+                decoration: const InputDecoration(labelText: 'Last Name'),
+              ),
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+              ),
+              TextField(
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 50, 0, 10),
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(200, 40),
                   ),
-                  TextField(
-                    controller: _firstNameController,
-                    decoration: const InputDecoration(labelText: 'First Name'),
-                  ),
-                  TextField(
-                    controller: _lastNameController,
-                    decoration: const InputDecoration(labelText: 'Last Name'),
-                  ),
-                  TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
-                  ),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(labelText: 'Password'),
-                    obscureText: true,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 50, 0, 10),
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(200, 40),
-                      ),
-                      onPressed: () => _signUpWithEmailAndPassword(context),
-                      child: const Text('Sign Up'),
-                    ),
-                  ),
-                ])));
+                  onPressed: () => _signUpWithEmailAndPassword(context),
+                  child: const Text('Sign Up'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
