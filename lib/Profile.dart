@@ -22,7 +22,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _loadProfile() async {
     try {
       _profile = await _profileRepository.getProfile();
-      print("USER UID FROM LOAD PROFILE: ${_profile.uid}");
       setState(() {
         _isLoading = false;
       });
